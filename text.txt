@@ -1,0 +1,114 @@
+===========================
+OBCHODNÍ PODMÍNKY
+===========================
+
+Obchodní podmínky služby [NÁZEV PLATFORMY]
+
+1. Základní ustanovení
+1.1. Tyto obchodní podmínky upravují užívání online platformy [NÁZEV PLATFORMY] (dále jen „Služba“), kterou provozuje [TVÉ JMÉNO / FIRMA], se sídlem [ADRESA], IČ: [DOPLŇTE].  
+1.2. Služba je určena výhradně osobám starším 18 let. Přístupem a užíváním Služby uživatel potvrzuje, že splňuje tuto podmínku.  
+1.3. Služba je určena pouze k zábavním účelům. Obsah generovaný umělou inteligencí je fiktivní a nemá reálný základ.  
+
+2. Povaha obsahu
+2.1. Služba umožňuje interakci s AI chatbotem a generování vizuálního obsahu erotické povahy.  
+2.2. Je zakázáno používat Službu k vytváření či vyžadování obsahu, který by byl v rozporu se zákonem ČR nebo EU, zejména:  
+- znázorňování osob mladších 18 let  
+- obsah zobrazující násilí, zneužívání nebo bestialitu  
+- obsah porušující autorská práva nebo práva třetích osob  
+
+3. Platby
+3.1. Platby za využívání Služby probíhají prostřednictvím kryptopeněženky MetaMask.  
+3.2. Všechny platby jsou konečné a nevratné. Uživatel bere na vědomí, že kryptotransakce nelze zvrátit.  
+3.3. Ceny jsou uvedeny v [např. USDT/ETH] a mohou se měnit podle tržních podmínek.  
+
+4. Odpovědnost
+4.1. Provozovatel neodpovídá za obsah vytvořený na základě uživatelských požadavků, pokud tento obsah neporušuje zákon.  
+4.2. Uživatel odpovídá za to, že jeho zadání a způsob používání Služby je v souladu s právními předpisy.  
+4.3. Provozovatel nenese odpovědnost za škody způsobené přerušením nebo nedostupností Služby.  
+
+5. Ochrana osobních údajů
+5.1. Provozovatel zpracovává osobní údaje v souladu s nařízením GDPR. Podrobnosti jsou uvedeny v samostatných Zásadách ochrany osobních údajů.  
+5.2. Uživatel souhlasí se zpracováním technických údajů nezbytných pro provoz Služby (např. IP adresa, logy).  
+
+6. Ukončení služby
+6.1. Provozovatel si vyhrazuje právo kdykoliv zablokovat účet uživatele, který poruší tyto podmínky.  
+6.2. Uživatel může přestat využívat Službu kdykoli bez nároku na vrácení zaplacených částek.  
+
+7. Závěrečná ustanovení
+7.1. Tyto podmínky se řídí právním řádem České republiky.  
+7.2. Veškeré spory budou řešeny u příslušného soudu ČR.  
+7.3. Tyto obchodní podmínky nabývají účinnosti dnem [DATUM].  
+
+===========================
+ZÁSADY OCHRANY OSOBNÍCH ÚDAJŮ (PRIVACY POLICY)
+===========================
+
+1. Úvod
+1.1. Tyto Zásady ochrany osobních údajů vysvětlují, jak společnost [TVÉ JMÉNO / FIRMA], se sídlem [ADRESA], IČ: [DOPLŇTE] (dále jen „Provozovatel“), zpracovává osobní údaje uživatelů platformy [NÁZEV PLATFORMY].  
+1.2. Ochrana osobních údajů probíhá v souladu s obecným nařízením EU o ochraně osobních údajů (GDPR).  
+
+2. Jaké údaje zpracováváme
+- technické údaje: IP adresa, typ zařízení, logy přístupu  
+- volitelné údaje, pokud je uživatel poskytne (např. email při registraci nebo podpoře)  
+- záznamy interakcí se Službou (chaty), pouze v nezbytné míře  
+- platební údaje se nezpracovávají – platby probíhají výhradně přes MetaMask  
+
+3. Účel zpracování
+- poskytování a provoz Služby  
+- zajištění bezpečnosti a prevence zneužívání  
+- řešení technické podpory  
+- plnění právních povinností (např. účetnictví)  
+
+4. Právní základ zpracování
+- nezbytné pro plnění smlouvy (užívání Služby)  
+- na základě souhlasu (např. email pro newsletter)  
+
+5. Sdílení údajů
+Osobní údaje nejsou prodávány ani zpřístupňovány třetím stranám. Mohou být předány pouze poskytovatelům IT služeb nebo orgánům veřejné moci, pokud to vyžaduje zákon.  
+
+6. Doba uchování
+- údaje uchovávány pouze po nezbytnou dobu  
+- technické logy max. [12 měsíců], pokud zákon nevyžaduje delší dobu  
+
+7. Práva uživatelů
+- právo na přístup, opravu, výmaz  
+- právo na omezení zpracování  
+- právo na přenositelnost údajů  
+- právo podat stížnost u ÚOOÚ  
+
+8. Zabezpečení dat
+Provozovatel používá technická a organizační opatření k ochraně údajů před zneužitím.  
+
+9. Kontakt
+📧 [tvůj email]  
+
+===========================
+CONTENT POLICY & DISCLAIMER
+===========================
+
+1. Úvod
+1.1. Tato pravidla používání obsahu (dále jen „Pravidla“) upravují využívání platformy [NÁZEV PLATFORMY].  
+1.2. Služba je určena výhradně uživatelům starším 18 let.  
+
+2. Povaha služby
+2.1. Služba využívá AI k vedení interaktivních chatů a generování vizuálního obsahu.  
+2.2. Obsah generovaný Službou je fiktivní, vytvořený algoritmicky a nemá reálný základ.  
+
+3. Zakázaný obsah
+Zakázáno je generovat nebo sdílet obsah, který:  
+- znázorňuje osoby mladší 18 let  
+- obsahuje násilí, zneužívání nebo incest  
+- obsahuje bestialitu nebo jiné zakázané praktiky  
+- porušuje autorská práva  
+- podněcuje k nenávisti, diskriminaci nebo trestné činnosti  
+
+4. Odpovědnost uživatele
+Uživatel nese plnou odpovědnost za způsob používání Služby a zadávání obsahu.  
+
+5. Disclaimer
+- Služba je určena pouze k zábavním účelům  
+- Obsah je fiktivní, nelze jej považovat za skutečný  
+- Provozovatel nenese odpovědnost za zneužití Služby uživateli  
+
+6. Vymáhání pravidel
+Provozovatel si vyhrazuje právo monitorovat uží
