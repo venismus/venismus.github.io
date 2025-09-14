@@ -1,191 +1,41 @@
 <!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="UTF-8">
-  <title>Elaria by Venismus – Vstup 18+</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      overflow: hidden;
-      background: #000;
-      font-family: 'Segoe UI', sans-serif;
-    }
-
-    /* Provokativní neon silueta background */
-    .hero-bg {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: url("sexy-background.jpg") center/cover no-repeat;
-      filter: blur(5px) brightness(0.45);
-      z-index: -2;
-    }
-
-    /* Dark overlay */
-    .overlay-bg {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.65);
-      z-index: -1;
-    }
-
-    /* Age Gate overlay */
-    .overlay {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%;
-      display: flex; align-items: center; justify-content: center;
-      z-index: 9999;
-    }
-
-    .box {
-      background: rgba(20,20,35,0.9);
-      padding: 50px 40px;
-      border-radius: 18px;
-      max-width: 520px;
-      text-align: center;
-      box-shadow: 0 0 25px rgba(255,77,136,0.5), 0 0 60px rgba(255,0,102,0.3);
-      animation: fadeIn 0.9s ease;
-      border: 1px solid rgba(255,77,136,0.3);
-    }
-
-    .logo-img img {
-      max-width: 240px;
-      margin-bottom: 20px;
-      filter: drop-shadow(0 0 20px #ff4d88) drop-shadow(0 0 40px #ff1a66);
-    }
-
-    .logo {
-      font-size: 42px;
-      font-weight: bold;
-      margin-bottom: 8px;
-      color: #ff4d88;
-      text-shadow: 0 0 15px #ff4d88, 0 0 30px #ff1a66, 0 0 60px #ff0066;
-    }
-
-    .tagline {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 30px;
-      color: #3ef0d0;
-      text-shadow: 0 0 12px #3ef0d0, 0 0 25px #29caa5;
-    }
-
-    .box h1 {
-      font-size: 24px;
-      margin-bottom: 18px;
-      color: #fff;
-      text-shadow: 0 0 12px #ff4d88, 0 0 25px #ff1a66;
-    }
-
-    .box p {
-      font-size: 16px;
-      line-height: 1.6;
-      margin-bottom: 28px;
-      color: #ccc;
-    }
-
-    .box a {
-      color: #ff4d88;
-      font-weight: bold;
-      text-decoration: none;
-      text-shadow: 0 0 8px #ff4d88, 0 0 15px #ff1a66;
-    }
-
-    .checkbox {
-      margin: 22px 0;
-      font-size: 15px;
-      color: #ddd;
-    }
-
-    .btn {
-      padding: 15px 32px;
-      margin: 8px;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-
-    .btn.accept {
-      background: linear-gradient(135deg, #ff4d88, #ff1a66);
-      color: #fff;
-      text-shadow: 0 0 10px #fff;
-      box-shadow: 0 0 18px #ff4d88, 0 0 45px #ff1a66;
-      animation: glowPulse 2s infinite;
-    }
-    .btn.accept:hover {
-      background: linear-gradient(135deg, #ff1a66, #ff0055);
-    }
-
-    .btn.deny {
-      background: #333;
-      color: #ccc;
-      box-shadow: 0 0 10px #222;
-    }
-    .btn.deny:hover {
-      background: #555;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.9); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    @keyframes glowPulse {
-      0% { box-shadow: 0 0 18px #ff4d88, 0 0 45px #ff1a66; }
-      50% { box-shadow: 0 0 35px #ff4d88, 0 0 80px #ff1a66; }
-      100% { box-shadow: 0 0 18px #ff4d88, 0 0 45px #ff1a66; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venismus</title>
+    <style>
+        body {
+            margin: 0;
+            background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        a.button {
+            padding: 1rem 2rem;
+            background-color: #7f00ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+        a.button:hover {
+            background-color: #e100ff;
+        }
+    </style>
 </head>
 <body>
-
-  <div class="hero-bg"></div>
-  <div class="overlay-bg"></div>
-
-  <div class="overlay" id="ageGate">
-    <div class="box">
-      <div class="logo-img">
-        <img src="logo.png" alt="Elaria by Venismus">
-      </div>
-      <div class="logo">Elaria</div>
-      <div class="tagline">by Venismus</div>
-
-      <h1>🔞 Vstup pouze pro dospělé (18+)</h1>
-      <p>
-        Tento web obsahuje obsah určený výhradně pro dospělé.<br>
-        Pokračováním potvrzujete, že vám je více než 18 let<br>
-        a souhlasíte s našimi 
-        <a href="/terms" target="_blank">Obchodními podmínkami</a>.
-      </p>
-
-      <div class="checkbox">
-        <label><input type="checkbox" id="agreeBox"> Souhlasím s podmínkami</label>
-      </div>
-
-      <button class="btn accept" onclick="enterSite()">Pokračovat</button>
-      <button class="btn deny" onclick="window.location='https://google.com'">Odejít</button>
-    </div>
-  </div>
-
-  <script>
-    function enterSite() {
-      if (!document.getElementById("agreeBox").checked) {
-        alert("Musíte souhlasit s podmínkami, abyste mohli pokračovat.");
-        return;
-      }
-      localStorage.setItem("ageVerified", "true");
-      document.getElementById("ageGate").style.display = "none";
-    }
-    window.onload = () => {
-      if (localStorage.getItem("ageVerified") === "true") {
-        document.getElementById("ageGate").style.display = "none";
-      }
-    };
-  </script>
-
+    <h1>Vítej na Venismus.com</h1>
+    <a href="main.html" class="button">Pokračovat do hlavního menu</a>
 </body>
 </html>

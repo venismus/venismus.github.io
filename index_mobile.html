@@ -1,37 +1,30 @@
-// server.js
-// Jednoduchý OpenAI-kompatibilní proxy. Udrž API klíč na serveru.
-import express from "express";
-import fetch from "node-fetch";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-const app = express();
-app.use(express.json());
-
-const PORT = process.env.PORT || 8787;
-const TARGET = process.env.OPENAI_BASE || "https://api.openai.com/v1";
-const API_KEY = process.env.OPENAI_API_KEY || "";
-
-if (!API_KEY) {
-  console.warn("⚠️  OPENAI_API_KEY není nastaven. Nastav ho před spuštěním.");
-}
-
-app.post("/chat", async (req, res) => {
-  try {
-    const r = await fetch(`${TARGET}/chat/completions`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${API_KEY}`
-      },
-      body: JSON.stringify(req.body)
-    });
-    res.status(r.status);
-    res.set("Content-Type", r.headers.get("content-type") || "application/json");
-    res.send(await r.text());
-  } catch (e) {
-    res.status(500).json({ error: e.message });
-  }
-});
-
-app.listen(PORT, () => {
-  console.log(`✅ Proxy běží na http://localhost:${PORT} → ${TARGET}`);
-});
+    <meta charset="UTF-8">
+    <title>VENISMUS</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="venismus_responsive_patch.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>VENISMUS</h1>
+        </header>
+        <main>
+            <section class="chat">
+                <div class="chat-window">
+                    <p>👁‍🗨 Vítej ve světě Venismus. Začni psát...</p>
+                </div>
+                <input type="text" placeholder="Zeptej se...">
+            </section>
+        </main>
+        <footer>
+            <p>© 2025 Venismus</p>
+        </footer>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

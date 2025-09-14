@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elaria — Chat & VIP galerie</title>
+  <style>
+    :root{
+      --bg1:#090919; --bg2:#0f0a2a; --card:#111a2a; --txt:#e6f0ff; --muted:#9db4cc;
+      --neon-p:#a855f7; --neon-b:#22d3ee;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; color:var(--txt);
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+      background:
+        radial-gradient(60% 80% at 18% 10%, rgba(34,211,238,.20), transparent 60%),
+        radial-gradient(60% 80% at 82% 0%, rgba(168,85,247,.25), transparent 60%),
+        linear-gradient(180deg, var(--bg2), var(--bg1));
+      min-height:100vh;
+    }
+    .wrap{max-width:1100px; margin:0 auto; padding:clamp(16px,3vw,28px)}
+    header{display:flex; align-items:center; justify-content:space-between; margin-bottom:14px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .logo{width:40px; height:40px; border-radius:12px;
+      background: radial-gradient(circle at 30% 30%, var(--neon-b), transparent 40%),
+                  radial-gradient(circle at 70% 70%, var(--neon-p), transparent 40%), #0b0b1d;}
+    nav{display:flex; gap:10px; flex-wrap:wrap}
+    .chip{padding:8px 12px; border-radius:12px; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1); text-decoration:none; color:var(--txt)}
+    .chip.active{border-color:rgba(34,211,238,.5)}
+    .grid{display:grid; gap:16px; grid-template-columns:1fr}
+    @media(min-width:900px){ .grid{ grid-template-columns:1.1fr .9fr } }
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px; padding:18px; box-shadow: 0 10px 35px rgba(0,0,0,.35);
+    }
+    .top{display:flex; justify-content:space-between; align-items:center; margin-bottom:10px}
+    .pill{padding:6px 10px; border-radius:999px; font-size:12px; background:rgba(34,211,238,.12); border:1px solid rgba(34,211,238,.35)}
+    .muted{color:var(--muted); font-size:13px}
+    .chat{height:380px; overflow:auto; padding:12px; background:#0b0f1e; border:1px solid #203045; border-radius:12px}
+    .msg{margin:8px 0; padding:10px 12px; background:#13243a; border-radius:10px; max-width:80%}
+    .msg.me{background:#1c2f4f; margin-left:auto}
+    .composer{display:flex; gap:8px; margin:10px 0}
+    input[type=text]{flex:1; padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,.15); background:#0e1626; color:var(--txt)}
+    .teasers{display:grid; gap:12px; grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+    .card img{width:100%; border-radius:10px; display:block}
+    .row{display:flex; justify-content:space-between; gap:10px; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.08); padding:10px 12px; border-radius:12px}
+    footer{margin:16px auto 8px; text-align:center}
+    .btn{
+      appearance:none; border:0; cursor:pointer; padding:10px 14px; border-radius:12px; font-weight:700; color:#061015;
+      background: linear-gradient(135deg, var(--neon-b), var(--neon-p)); box-shadow: 0 0 24px rgba(168,85,247,.25)
+    }
+    .btn.ghost{background:transparent; color:var(--txt); border:1px solid rgba(255,255,255,.18)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand"><div class="logo"></div><strong>Elaria <span class="muted">by Venismus</span></strong></div>
+      <nav>
+        <a class="chip active" href="#">Chat</a>
+        <a class="chip" href="#vip">VIP</a>
+        <a class="chip" href="#tokens">Dobít</a>
+      </nav>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <div class="top">
+          <h2>Chat</h2>
+          <div class="pill">18+ VIP fotky za tokeny</div>
+        </div>
+        <div id="chat" class="chat"></div>
+        <div class="composer">
+          <input id="msg" type="text" placeholder="Napiš Elarii…">
+          <button class="btn" onclick="send()">Odeslat</button>
+        </div>
+        <p class="muted">Teasery jsou zdarma. VIP fotografie se odemykají za tokeny a doručují se přes soukromý odkaz s krátkou platností.</p>
+      </section>
+
+      <aside class="card" id="vip">
+        <div class="top"><h2>Galerie teaserů</h2><span class="pill" id="tokpill">TOK: 100</span></div>
+        <div class="teasers">
+          <!-- Používám placeholder obrázky, ať nemusíš nic nahrávat -->
+          <div class="card">
+            <img src="https://placehold.co/320x420?text=Elaria+Teaser+01" alt="Elaria teaser 01">
+            <button class="btn" onclick="unlock('elaria','elaria_full01.jpg',15)">Odemknout VIP (−15 TOK)</button>
+          </div>
+          <div class="card">
+            <img src="https://placehold.co/320x420?text=Elaria+Teaser+02" alt="Elaria teaser 02">
+            <button class="btn" onclick="unlock('elaria','elaria_full02.jpg',15)">Odemknout VIP (−15 TOK)</button>
+          </div>
+          <div class="card">
+            <img src="https://placehold.co/320x420?text=Auren+Teaser+01" alt="Auren teaser 01">
+            <button class="btn" onclick="unlock('auren','auren_full01.jpg',15)">Odemknout VIP (−15 TOK)</button>
+          </div>
+          <div class="card">
+            <img src="https://placehold.co/320x420?text=Naiya+Teaser+01" alt="Naiya teaser 01">
+            <button class="btn" onclick="unlock('naiya','naiya_full01.jpg',15)">Odemknout VIP (−15 TOK)</button>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="card" style="margin-top:14px">
+      <div class="top"><h2>Historie</h2><span class="pill">Bezpečný obsah — vše 18+</span></div>
+      <div id="hist">
+        <div class="row"><span>Vytvořen účet</span><span>+100 TOK</span></div>
+      </div>
+    </section>
+
+    <footer class="muted">© <span id="y"></span> Venismus Digital — kontakt: blackvista@seznam.cz</footer>
+  </div>
+
+  <script>
+    // Jednoduchý token engine (localStorage)
+    const chat = document.getElementById('chat');
+    const hist = document.getElementById('hist');
+    const TOK_KEY = 'ven_tok_v1';
+    let TOK = Number(localStorage.getItem(TOK_KEY) || '100');
+    document.getElementById('tokpill').textContent = 'TOK: ' + TOK;
+    document.getElementById('y').textContent = new Date().getFullYear();
+
+    function saveTOK(){ localStorage.setItem(TOK_KEY, TOK); document.getElementById('tokpill').textContent = 'TOK: ' + TOK; }
+    function push(text, me=false, img=null){
+      const b = document.createElement('div'); b.className = 'msg' + (me ? ' me' : '');
+      if(img){ const i = new Image(); i.src = img; i.style.maxWidth='240px'; i.style.borderRadius='10px'; i.style.display='block'; b.appendChild(i); }
+      if(text){ b.appendChild(document.createTextNode(text)); }
+      chat.appendChild(b); chat.scrollTop = chat.scrollHeight;
+    }
+    function addHist(label, val){
+      const r = document.createElement('div'); r.className='row'; r.innerHTML = `<span>${label}</span><span>${val}</span>`;
+      hist.prepend(r);
+    }
+    function send(){
+      const i = document.getElementById('msg'); const v = i.value.trim(); if(!v) return;
+      push(v,true); i.value='';
+      setTimeout(()=>push('Elaria: Chceš odemknout VIP fotku? Vyber si vpravo 💜'), 350);
+    }
+
+    // VIP odemykání – funguje i bez backendu (fallback)
+    async function unlock(model, fileName, priceTOK){
+      if(TOK < priceTOK){ alert('Nedostatek tokenů. Dobij účet.'); return; }
+      TOK -= priceTOK; saveTOK(); addHist('VIP foto ('+model+')', '−'+priceTOK+' TOK');
+
+      try{
+        // Pokus o backend (až ho přidáme):
+        const res = await fetch('/api/get-photo-url?m='+encodeURIComponent(model)+'&f='+encodeURIComponent(fileName));
+        if(res.ok){
+          const j = await res.json();
+          push(null, false, j.signedUrl);
+          push('Elaria: Přidáno do tvé galerie. Zbývá '+TOK+' TOK.');
+          return;
+        }
+        throw new Error('No backend');
+      }catch(e){
+        // Fallback bez backendu – zobrazí se dočasná VIP náhrada
+        const placeholder = 'https://placehold.co/480x640?text=VIP+Photo';
+        push(null,false,placeholder);
+        push('Elaria: (DEMO) Obrázek doručen. Zbývá '+TOK+' TOK.');
+      }
+    }
+  </script>
+</body>
+</html>

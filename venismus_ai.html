@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <title>VENISMUS • Auri (AI)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Pokud soubor existuje, využijeme tvůj responsive patch -->
+  <link rel="stylesheet" href="venismus_responsive_patch.css">
+  <style>
+    :root{
+      --bg:#0a0a0a; --panel:#141414; --muted:#9aa0a6; --accent:#9d00ff; --ok:#22c55e; --err:#ef4444;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:system-ui,Segoe UI,Roboto,Arial; background:var(--bg); color:#eaeaea;
+      min-height:100dvh; display:grid; grid-template-rows:auto 1fr auto;
+    }
+    header, footer{
+      background:#0f0f10; border-block:1px solid #1e1e20; padding:12px 16px; display:flex; gap:12px; align-items:center; justify-content:space-between;
+    }
+    .brand{font-weight:800; letter-spacing:.4px; color:#fff}
+    .badge{font-size:12px; padding:3px 8px; border-radius:999px; background:#1f1f22; color:var(--muted); border:1px solid #2a2a2e}
+    .container{max-width:900px; width:100%; margin:0 auto; padding:12px}
+    .chat{
+      height: calc(100dvh - 140px);
+      max-height: 100%;
+      overflow:auto; background:linear-gradient(180deg,#0e0e10,#0b0b0c);
+      border-inline:1px solid #1c1c20;
+      padding:16px;
+    }
+    .row{display:flex; gap:10px; align-items:flex-start; margin:10px 0;}
+    .row.user{justify-content:flex-end}
+    .bubble{
+      max-width:min(80ch, 90%);
+      padding:10px 12px; border-radius:12px; font-size:15px; line-height:1.45;
+      background:#16161a; border:1px solid #23232a; color:#eaeaea; white-space:pre-wrap; word-wrap:break-word;
+    }
+    .row.user .bubble{ background:#181825; border-color:#2a2a3a }
+    .row.system .bubble{ background:#121214; border-color:#222 }
+    .meta{font-size:12px; color:var(--muted); margin-top:2px}
+    .toolbar{display:flex; gap:8px; align-items:center}
+    .btn{
+      appearance:none; border:1px solid #2b2b2f; background:#141416; color:#eaeaea;
+      padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:700;
+    }
+    .btn.accent{ background:linear-gradient(180deg, #b13cff, var(--accent)); border:0; color:#fff; }
+    .btn.safe{ background:#0b3b17; border-color:#14532d; color:#b7ffcf }
+    .btn.danger{ background:#3b0b10; border-color:#7f1d1d; color:#ffc6c6 }
+    .settings{ display:none; background:var(--panel); border:1px solid #23232a; border-radius:12px; padding:12px; margin:12px 0; }
+    .settings.open{ display:block }
+    label{display:block; font-size:12px; color:var(--muted); margin:10px 2px 4px}
+    input, select{
+      width:100%; padding:10px 12px; border-radius:10px; border:1px solid #2b2b2f; background:#0f0f12; color:#eaeaea;
+    }
+    .row-input{
+      display:flex; gap:8px; padding:12px; background:#0e0e10; border-top:1px solid #1e1e20;
+    }
+    .row-input input[type="text"]{ flex:1 }
+    .status{ font-size:12px; color:var(--muted) }
+    .kbd{ font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; background:#17171b; border:1px solid #2a2a30; padding:2px 6px; border-radius:6px; }
+    .link{color:var(--accent); text-decoration:none}
+    @media (max-width:640px){
+      .chat{ height: calc(100dvh - 170px); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container" style="display:flex; gap:10px; align-items:center; justify-content:space-between;">
+      <div>
+        <div class="brand">VENISMUS • Auri</div>
+        <div class="status" id="status">Režim: <span id="modeLabel">Pravidla (offline)</span></div>
+      </div>
+      <div class="toolbar">
+        <button id="toggleSettings" class="btn">⚙️ Nastavení</button>
+        <a class="btn" href="index.html">🏠 Domů</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section id="settings" class="settings">
+      <div class="toolbar" style="justify-content:space-between">
+        <strong>AI Nastavení</strong>
+        <span class="badge">Bezpečnější s proxy (viz níže)</span>
+      </div>
+      <label>Engine</label>
+      <select id="engine">
+        <option value="rules">Pravidla (offline)</option>
+        <option value="openai">OpenAI-kompatibilní API</option>
+      </select>
+
+      <div id="apiFields" style="display:none">
+        <label>API Endpoint (OpenAI-styl)</label>
+        <input id="endpoint" placeholder="https://api.openai.com/v1/chat/completions" />
+        <label>Model</label>
+        <input id="model" placeholder="gpt-4o-mini" />
+        <label>API klíč</label>
+        <input id="apiKey" placeholder="sk-..." />
+      </div>
+
+      <div class="toolbar" style="margin-top:10px; gap:8px; flex-wrap:wrap">
+        <button id="saveCfg" class="btn safe">Uložit nastavení</button>
+        <button id="testCfg" class="btn">Test připojení</button>
+        <button id="clearChat" class="btn danger">Vymazat konverzaci</button>
+      </div>
+
+      <div class="status" style="margin-top:8px">
+        Tip: pro **lokální běh bez úniku klíče** použij proxy server (viz „server.js“ níže).
+      </div>
+    </section>
+
+    <section id="chat" class="chat" aria-live="polite" aria-atomic="false"></section>
+  </main>
+
+  <footer>
+    <div class="container row-input">
+      <input id="prompt" type="text" autocomplete="off" placeholder="Zeptej se Auri... (Enter pošle zprávu)" />
+      <button id="send" class="btn accent">Odeslat</button>
+    </div>
+  </footer>
+
+  <script>
+    // -------------------------
+    // Persistence & Konfigurace
+    // -------------------------
+    const CFG_KEY = "venismus_ai_cfg_v1";
+    const cfgDefaults = {
+      engine: "rules",
+      endpoint: "https://api.openai.com/v1/chat/completions",
+      model: "gpt-4o-mini",
+      apiKey: ""
+    };
+    const cfg = loadCfg();
+    function loadCfg(){
+      try { return { ...cfgDefaults, ...(JSON.parse(localStorage.getItem(CFG_KEY))||{}) }; }
+      catch { return { ...cfgDefaults }; }
+    }
+    function saveCfg(){
+      localStorage.setItem(CFG_KEY, JSON.stringify(cfg));
+      reflectCfg();
+    }
+    function reflectCfg(){
+      document.getElementById("engine").value = cfg.engine;
+      document.getElementById("endpoint").value = cfg.endpoint;
+      document.getElementById("model").value = cfg.model;
+      document.getElementById("apiKey").value = cfg.apiKey;
+      document.getElementById("apiFields").style.display = (cfg.engine === "openai") ? "block" : "none";
+      document.getElementById("modeLabel").textContent = (cfg.engine === "openai") ? "OpenAI-kompatibilní API" : "Pravidla (offline)";
+    }
+
+    // -------------------------
+    // UI Helpers
+    // -------------------------
+    const chat = document.getElementById("chat");
+    const promptEl = document.getElementById("prompt");
+    const sendBtn = document.getElementById("send");
+
+    function addBubble(role, text){
+      const row = document.createElement("div");
+      row.className = "row " + role;
+      const b = document.createElement("div");
+      b.className = "bubble";
+      b.innerHTML = renderMarkdown(text);
+      row.appendChild(b);
+      chat.appendChild(row);
+      chat.scrollTop = chat.scrollHeight;
+      return b;
+    }
+    function setStatus(msg){ document.getElementById("status").innerHTML = msg; }
+
+    // Jednoduché Markdown (tučně, kódový blok, odstavce, odkazy)
+    function escapeHtml(s){ return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+    function renderMarkdown(md){
+      let h = escapeHtml(md);
+      h = h.replace(/```([\s\S]*?)```/g, (_m, code) => `<pre class="kbd">${code}</pre>`);
+      h = h.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+      h = h.replace(/\*([^*]+)\*/g, "<em>$1</em>");
+      h = h.replace(/`([^`]+)`/g, `<span class="kbd">$1</span>`);
+      h = h.replace(/$begin:math:display$(.+?)$end:math:display$$begin:math:text$(https?:\\/\\/[^\\s]+)$end:math:text$/g, `<a class="link" href="$2" target="_blank" rel="noopener">$1</a>`);
+      h = h.split(/\n{2,}/).map(p => `<p>${p}</p>`).join("");
+      return h;
+    }
+
+    // -------------------------
+    // Pravidlový (offline) engine
+    // -------------------------
+    const STOPWORDS = new Set("a i ve v se si s z za do ze na o u od po pro při aby že jak co kdo kde kdy jaký který nebo ano ne být mít ten ta to být jsem jsi jsme jste jsou".split(" "));
+    const KB = [
+      { q:"venismus vision", a:"VENISMUS je koncept zaměřený na **vizi, estetiku a interakci**. Cílem Auri je být rozhraním mezi vizí a uživatelem." },
+      { q:"kdo jsi", a:"Jsem **Auri**, průvodce VENISMUS. Umím offline odpovídat na základě pravidel a lokální znalosti. Pro hlubší konverzaci přepni v ⚙️ na *OpenAI-kompatibilní API*." },
+      { q:"jak začít", a:"Klikni na **⚙️ Nastavení**, zvol *OpenAI-kompatibilní API*, doplň endpoint, model a klíč a ulož. Nebo zůstaň v offline režimu." },
+      { q:"pomoc", a:"Krátké tipy: \n- **Enter** pošle zprávu\n- **/clear** smaže chat\n- **/mode** ukáže aktivní engine\n- ⚙️ otevře nastavení" },
+      { q:"čas", a:"Teď je "+ new Date().toLocaleString() },
+    ];
+    function tokenize(t){ return t.toLowerCase().normalize("NFKD").replace(/[^\p{L}\p{N}\s]+/gu," ").split(/\s+/).filter(w=>w && !STOPWORDS.has(w)); }
+    function score(q, doc){
+      const qset = new Set(tokenize(q)); const dset = new Set(tokenize(doc));
+      const inter = [...qset].filter(x=>dset.has(x)).length;
+      const denom = Math.sqrt(qset.size * dset.size) || 1;
+      return inter/denom;
+    }
+    function rulesReply(user){
+      const t = user.trim().toLowerCase();
+      // Pár rychlých intentů
+      if(/^(ahoj|čau|zdar|nazdar|hello|hi)\b/.test(t)) return "Ahoj! Jsem **Auri**. Jak ti můžu pomoct?";
+      if(/\b(kdo|co)\s+jsi\b/.test(t)) return KB[1].a;
+      if(/\b(pomoc|help|nápověda)\b/.test(t)) return KB[3].a;
+      if(/^\/mode\b/.test(t)) return "Režim: **Pravidla (offline)**";
+      if(/^\/clear\b/.test(t)) { clearChat(); return "Chat vymazán. Pokračuj otázkou ✨"; }
+      if(/\bčas|kolik je hodin\b/.test(t)) return KB[4].a;
+
+      // Retrieval z mini KB
+      let best = {score:0, a:"Nerozumím přesně. Můžeš to říct jinak, nebo zapni v ⚙️ vzdálený model? 🙂"};
+      for(const item of KB){
+        const sc = score(user, item.q+" "+item.a);
+        if(sc > best.score) best = { score: sc, a: item.a };
+      }
+      return best.a;
+    }
+
+    // -------------------------
+    // OpenAI-kompatibilní engine
+    // -------------------------
+    const systemPrompt = "You are Auri, the assistant of VENISMUS. Be concise, helpful, creative. Answer in the user's language (Czech if detected).";
+    const history = [];
+
+    async function llmReply(user){
+      const body = {
+        model: cfg.model,
+        messages: [
+          { role:"system", content: systemPrompt },
+          ...history,
+          { role:"user", content: user }
+        ],
+        temperature: 0.5
+      };
+      const res = await fetch(cfg.endpoint, {
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json",
+          ...(cfg.apiKey ? {"Authorization":"Bearer "+cfg.apiKey} : {})
+        },
+        body: JSON.stringify(body)
+      });
+      if(!res.ok){
+        const text = await res.text().catch(()=> "");
+        throw new Error("API chyba: "+res.status+" "+res.statusText+" "+text);
+      }
+      const data = await res.json();
+      const out = data?.choices?.[0]?.message?.content?.trim();
+      if(!out) throw new Error("Neplatná odpověď API.");
+      history.push({ role:"user", content:user }, { role:"assistant", content:out });
+      return out;
+    }
+
+    // -------------------------
+    // Interakce
+    // -------------------------
+    function clearChat(){
+      chat.innerHTML = "";
+      history.length = 0;
+      addBubble("system", "Auri je připravena. Napiš dotaz nebo otevři ⚙️ a vyber engine.");
+    }
+    clearChat();
+
+    document.getElementById("toggleSettings").onclick = () => {
+      document.getElementById("settings").classList.toggle("open");
+    };
+
+    document.getElementById("engine").onchange = (e) => {
+      cfg.engine = e.target.value; saveCfg();
+    };
+    document.getElementById("endpoint").oninput = (e) => cfg.endpoint = e.target.value;
+    document.getElementById("model").oninput = (e) => cfg.model = e.target.value;
+    document.getElementById("apiKey").oninput = (e) => cfg.apiKey = e.target.value;
+
+    document.getElementById("saveCfg").onclick = () => { saveCfg(); addBubble("system","Nastavení uloženo ✔️"); };
+    document.getElementById("testCfg").onclick = async () => {
+      if(cfg.engine!=="openai") return addBubble("system","Přepni engine na **OpenAI-kompatibilní API**.");
+      addBubble("system","Testuji připojení…");
+      try { const ans = await llmReply("Napiš jednou větou, že připojení funguje."); addBubble("assistant", ans); }
+      catch(e){ addBubble("assistant","❌ "+e.message); }
+    };
+    document.getElementById("clearChat").onclick = () => clearChat();
+
+    function send(){
+      const q = promptEl.value.trim(); if(!q) return;
+      promptEl.value = "";
+      addBubble("user", q);
+      if(cfg.engine === "rules"){
+        const a = rulesReply(q);
+        addBubble("assistant", a);
+      } else {
+        addBubble("assistant", "…přemýšlím");
+        (async () => {
+          try {
+            const ans = await llmReply(q);
+            // nahradíme poslední bublinu textem
+            const last = [...chat.querySelectorAll(".row.assistant .bubble")].pop();
+            if(last) last.innerHTML = renderMarkdown(ans);
+          } catch(e){
+            const last = [...chat.querySelectorAll(".row.assistant .bubble")].pop();
+            if(last) last.innerHTML = renderMarkdown("❌ "+e.message+"\n\n> Tip: pokud narazíš na CORS, použij proxy **server.js** níže.");
+          }
+        })();
+      }
+    }
+    sendBtn.onclick = send;
+    promptEl.addEventListener("keydown", e => {
+      if(e.key==="Enter"){ e.preventDefault(); send(); }
+    });
+
+    reflectCfg();
+  </script>
+</body>
+</html>

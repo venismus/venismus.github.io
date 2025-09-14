@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Venismus – Responsive Patch Demo (Dark Mode + Grid + Transitions)</title>
+  <style>
+  
+/* --- Responsive patch for Venismus --- */
+html { box-sizing: border-box; }
+*, *::before, *::after { box-sizing: inherit; }
+
+img, video, canvas, svg { max-width: 100%; height: auto; }
+
+/* Improve focus visibility */
+:focus-visible { outline: 2px dashed #888; outline-offset: 2px; }
+
+/* Base tweaks */
+body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+/* Make inputs and buttons full-width on small screens */
+input[type="text"], input[type="search"], input[type="email"], button {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Chat window adapts */
+.chat-window { height: 40vh; min-height: 220px; }
+
+/* Responsive container and typography */
+@media (max-width: 900px) {
+  .container { padding: 16px; }
+}
+
+@media (max-width: 640px) {
+  body { font-size: 16px; line-height: 1.5; }
+  header, footer { padding: 12px 0; }
+  .container { max-width: 100%; padding: 12px; }
+  nav ul { display: flex; flex-wrap: wrap; gap: 8px; padding-left: 0; }
+  nav li { list-style: none; }
+  nav a { display: inline-block; padding: 8px 10px; }
+  .chat-window { height: 50vh; }
+}
+
+  /* --- Demo theme tokens --- */
+  :root {
+    --c-bg:#f8f9fa; --c-text:#212529; --c-surface:#ffffff; --c-border:#e5e7eb; --c-link:#0d6efd;
+    --c-accent:#228be6;
+    --radius:12px;
+    --shadow: 0 1px 2px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.06);
+    --transition: 200ms ease-in-out;
+  }
+  /* Respect system preference by default */
+  @media (prefers-color-scheme: dark) {
+    :root { --c-bg:#181a1b; --c-text:#e9ecef; --c-surface:#242526; --c-border:#3a3b3c; --c-link:#74c0fc; }
+  }
+  /* Explicit theme override via class on body */
+  body.light { --c-bg:#f8f9fa; --c-text:#212529; --c-surface:#ffffff; --c-border:#e5e7eb; --c-link:#0d6efd; }
+  body.dark  { --c-bg:#181a1b; --c-text:#e9ecef; --c-surface:#242526; --c-border:#3a3b3c; --c-link:#74c0fc; }
+
+  /* --- Base --- */
+  body {
+    margin:0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, 'Noto Sans', Arial;
+    background: var(--c-bg); color: var(--c-text);
+    transition: background-color var(--transition), color var(--transition);
+  }
+  a { color: var(--c-link); }
+  header, footer { background: var(--c-surface); border-bottom:1px solid var(--c-border); transition: background-color var(--transition), border-color var(--transition); }
+  header .container, footer .container { display:flex; align-items:center; justify-content:space-between; gap:16px; }
+  nav a { text-decoration:none; border:1px solid var(--c-border); border-radius:8px; background:var(--c-surface); padding:8px 10px; transition: background-color var(--transition), border-color var(--transition), color var(--transition), transform 120ms ease; }
+  nav a:active { transform: translateY(1px); }
+  nav ul { flex-wrap:wrap; gap:8px; }
+
+  .brand { font-weight:700; letter-spacing:.2px; }
+  main .container { display:grid; grid-template-columns:2fr 1fr; gap:24px; max-width:1100px; margin:0 auto; padding:24px; }
+  .card { background:var(--c-surface); border:1px solid var(--c-border); border-radius:var(--radius); padding:16px; box-shadow: var(--shadow); transition: background-color var(--transition), border-color var(--transition), box-shadow var(--transition); }
+  .chat-window { background:var(--c-surface); border:1px solid var(--c-border); border-radius:var(--radius); padding:12px; overflow:auto; transition: background-color var(--transition), border-color var(--transition); }
+  .msg { display:flex; gap:8px; margin-bottom:10px; }
+  .msg .bubble { padding:10px 12px; border-radius:10px; border:1px solid var(--c-border); transition: background-color var(--transition), border-color var(--transition), color var(--transition); }
+  .msg.user .bubble { background:#eef6ff; }
+  .msg.bot .bubble { background:#f3f4f6; }
+  body.dark .msg.user .bubble { background:#1e3a8a; color:#fff; }
+  body.dark .msg.bot .bubble { background:#343a40; }
+  .form-row { display:grid; gap:10px; }
+  .gallery img, .gallery video { display:block; width:100%; border-radius:10px; border:1px solid var(--c-border); transition: border-color var(--transition); }
+
+  /* CSS Grid gallery */
+  .grid-gallery {
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap:12px;
+    margin-top:16px;
+  }
+  .grid-gallery figure {
+    margin:0; background:var(--c-surface); border:1px solid var(--c-border); border-radius:10px; overflow:hidden;
+    transition: background-color var(--transition), border-color var(--transition), transform 150ms ease;
+  }
+  .grid-gallery figure:hover { transform: translateY(-2px); }
+  .grid-gallery img { display:block; width:100%; height:auto; }
+  .grid-gallery figcaption { padding:8px 10px; font-size:.9rem; opacity:.85; }
+
+  /* Controls */
+  .toolbar { display:flex; gap:8px; align-items:center; }
+  .btn, .dark-toggle {
+    cursor:pointer; padding:8px 12px; border-radius:8px; border:1px solid var(--c-border);
+    background:var(--c-surface); color:var(--c-text);
+    transition: background-color var(--transition), color var(--transition), border-color var(--transition), transform 120ms ease;
+  }
+  .btn:active, .dark-toggle:active { transform: translateY(1px); }
+
+  @media (max-width: 900px) { main .container { grid-template-columns:1fr; } }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="brand">Venismus</div>
+      <nav aria-label="Hlavní navigace">
+        <ul>
+          <li><a href="#">Domů</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Ceník</a></li>
+          <li><a href="#">Kontakt</a></li>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Přihlásit</a></li>
+          <li><a href="#">O nás</a></li>
+          <li><a href="#">Reference</a></li>
+          <li><a href="#">Podpora</a></li>
+          <li><a href="#">Kariéra</a></li>
+          <li><a href="#">Dokumentace</a></li>
+        </ul>
+      </nav>
+      <div class="toolbar">
+        <button class="dark-toggle" id="toggleTheme" aria-pressed="false">🌓 Dark Mode</button>
+        <button class="btn" id="resetTheme" title="Vrátit na výchozí">↺ Výchozí</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      <section class="card">
+        <h1>Ukázka responsivity + Dark mode + Grid + Transitions</h1>
+        <p>Zužuj okno, otevři na mobilu, nebo přepínej motiv. Přidal jsem plynulé přechody, gridovou galerii a respektování systémového motivu.</p>
+        <ul>
+          <li><strong>Transitions:</strong> Barvy a pozadí se mění plynule (s respektem k <code>prefers-reduced-motion</code>).</li>
+          <li><strong>Dark Mode:</strong> Automaticky dle systému, ručně přepínatelný a zapamatovaný.</li>
+          <li><strong>CSS Grid galerie:</strong> <code>auto-fit</code> + <code>minmax</code> pro fluidní rozvržení.</li>
+        </ul>
+
+        <div class="gallery" style="margin-block:16px;">
+          <img alt="Demo obrázek" src="data:image/svg+xml;utf8,
+          <svg xmlns='http://www.w3.org/2000/svg' width='1200' height='500'>
+            <defs><linearGradient id='g' x1='0' x2='1' y1='0' y2='1'>
+              <stop offset='0%' stop-color='%23b2f2bb'/><stop offset='100%' stop-color='%23a5d8ff'/>
+            </linearGradient></defs>
+            <rect width='100%' height='100%' fill='url(%23g)'/>
+            <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23343a40' font-size='42' font-family='system-ui'>Fluidní obrázek</text>
+          </svg>">
+          <video controls poster="data:image/svg+xml;utf8,
+          <svg xmlns='http://www.w3.org/2000/svg' width='800' height='450'>
+            <rect width='100%' height='100%' fill='%23ffd8a8'/>
+            <text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%23000' font-size='28'>Ukázkové video</text>
+          </svg>">
+            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+            Tvůj prohlížeč nepodporuje video tag.
+          </video>
+        </div>
+
+        <div class="grid-gallery" aria-label="Galerie ukázkových dlaždic">
+          <figure><img alt='Tile 1' src='data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='#88aaff'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#000' font-size='28'>Dlaždice 1</text></svg>'><figcaption>Dlaždice 1</figcaption></figure><figure><img alt='Tile 2' src='data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='#a8e6cf'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#000' font-size='28'>Dlaždice 2</text></svg>'><figcaption>Dlaždice 2</figcaption></figure><figure><img alt='Tile 3' src='data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='#ffd3b6'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#000' font-size='28'>Dlaždice 3</text></svg>'><figcaption>Dlaždice 3</figcaption></figure><figure><img alt='Tile 4' src='data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='#ffaaa5'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#000' font-size='28'>Dlaždice 4</text></svg>'><figcaption>Dlaždice 4</figcaption></figure><figure><img alt='Tile 5' src='data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='#dcedc1'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#000' font-size='28'>Dlaždice 5</text></svg>'><figcaption>Dlaždice 5</figcaption></figure><figure><img alt='Tile 6' src='data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='#a8dadc'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#000' font-size='28'>Dlaždice 6</text></svg>'><figcaption>Dlaždice 6</figcaption></figure><figure><img alt='Tile 7' src='data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='#bde0fe'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#000' font-size='28'>Dlaždice 7</text></svg>'><figcaption>Dlaždice 7</figcaption></figure><figure><img alt='Tile 8' src='data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='#cdb4db'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#000' font-size='28'>Dlaždice 8</text></svg>'><figcaption>Dlaždice 8</figcaption></figure><figure><img alt='Tile 9' src='data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='600' height='400'><rect width='100%' height='100%' fill='#bee1e6'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='#000' font-size='28'>Dlaždice 9</text></svg>'><figcaption>Dlaždice 9</figcaption></figure>
+        </div>
+
+        <form class="form-row" action="#" method="post" style="margin-top:16px;">
+          <label for="email">E-mail</label>
+          <input type="email" id="email" name="email" placeholder="např. jana@example.com" required>
+          <label for="search">Hledat</label>
+          <input type="search" id="search" name="search" placeholder="Hledej…">
+          <button type="submit" class="btn">Odeslat</button>
+        </form>
+      </section>
+
+      <aside class="card">
+        <h2>Chat okno</h2>
+        <div class="chat-window" role="log" aria-live="polite">
+          <div class="msg user"><div class="bubble">Ahoj! Jak to bude vypadat na mobilu?</div></div>
+          <div class="msg bot"><div class="bubble">Okno chatu zabere 50&nbsp;vh, vstupy a tlačítka budou přes celou šířku.</div></div>
+          <div class="msg user"><div class="bubble">A co fokus, Dark mode a galerie?</div></div>
+          <div class="msg bot"><div class="bubble">Fokus má zřetelný obrys, Dark mode respektuje systém a jde přepnout, galerie je CSS Grid.</div></div>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <small>&copy; 2025 Venismus</small>
+      <a href="#" class="btn">Zpět nahoru</a>
+    </div>
+  </footer>
+
+  <script>
+  // Theme handling: remember user choice and reflect pressed state
+  (function() {
+    const KEY = 'venismus-theme';
+    const btn = document.getElementById('toggleTheme');
+    const reset = document.getElementById('resetTheme');
+
+    function apply(theme) {
+      document.body.classList.remove('light','dark');
+      if (theme) document.body.classList.add(theme);
+      btn.setAttribute('aria-pressed', theme === 'dark');
+    }
+
+    // Load saved theme (if any)
+    try {
+      const saved = localStorage.getItem(KEY);
+      if (saved === 'light' || saved === 'dark') apply(saved);
+    } catch(e) { /* ignore */ }
+
+    btn.addEventListener('click', function() {
+      const isDark = document.body.classList.contains('dark');
+      const next = isDark ? 'light' : 'dark';
+      apply(next);
+      try { localStorage.setItem(KEY, next); } catch(e) { /* ignore */ }
+    });
+
+    reset.addEventListener('click', function() {
+      apply(null);
+      try { localStorage.removeItem(KEY); } catch(e) { /* ignore */ }
+    });
+  })();
+  </script>
+</body>
+</html>

@@ -1,138 +1,36 @@
-
-:root{
-  --bg:#0b0a0c;
-  --card:#131018;
-  --ink:#e7d7ff;
-  --muted:#bfa6ff;
-  --accent:#a36bff;
-  --glow: 0 0 0.5rem rgba(163,107,255,.5), 0 0 1.2rem rgba(163,107,255,.35);
+body {
+    background-color: #0d0d0d;
+    color: #f0f0f0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
 }
-*{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:ui-serif, Georgia, 'Times New Roman', serif}
-a{color:inherit;text-decoration:none}
-.container{max-width:1100px;margin:auto;padding:24px}
-.header{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;position:sticky;top:0;background:rgba(11,10,12,.7);backdrop-filter: blur(6px);border-bottom:1px solid rgba(163,107,255,.12)}
-.brand{letter-spacing:.25rem;font-size:1.1rem;color:var(--muted)}
-.nav{display:flex;gap:14px;flex-wrap:wrap}
-.nav a{padding:8px 12px;border:1px solid rgba(163,107,255,.2);border-radius:10px}
-.nav a:hover{box-shadow:var(--glow);border-color:rgba(163,107,255,.5)}
-h1,h2{font-weight:500;letter-spacing:.35rem;text-align:center}
-.hero{display:grid;gap:20px;justify-items:center;padding:64px 20px;background: radial-gradient(1200px 600px at 50% -10%, rgba(163,107,255,.12), transparent)}
-.hero .cta{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
-.btn{display:inline-flex;align-items:center;justify-content:center;padding:14px 24px;border-radius:12px;border:1px solid rgba(163,107,255,.35);box-shadow:var(--glow)}
-.btn.primary{background:rgba(163,107,255,.12)}
-.btn.ghost{background:transparent}
-.grid{display:grid;gap:16px;grid-template-columns:repeat(3,1fr)}
-.card{background:var(--card);border-radius:16px;padding:18px;border:1px solid rgba(163,107,255,.15)}
-.card:hover{box-shadow:var(--glow)}
-.badge{font-size:.8rem;color:var(--muted)}
-.input, select, textarea{width:100%;padding:12px 14px;border-radius:12px;border:1px solid rgba(163,107,255,.25);background:#0e0c12;color:var(--ink)}
-label{font-size:.9rem;color:var(--muted)}
-footer{border-top:1px solid rgba(163,107,255,.12);margin-top:32px;padding:24px;color:var(--muted);text-align:center}
-.split{display:grid;gap:24px;grid-template-columns:1fr 1fr;align-items:start}
-.gallery{display:grid;gap:12px;grid-template-columns:repeat(2,1fr)}
-.gallery img{width:100%;height:140px;object-fit:cover;border-radius:12px;border:1px solid rgba(163,107,255,.2)}
-.kv{border:1px dashed rgba(163,107,255,.25);height:160px;border-radius:12px;display:grid;place-items:center;color:var(--muted)}
-.pricing{display:grid;gap:16px;grid-template-columns:repeat(2,1fr)}
-.plan{padding:22px;border-radius:16px;background:var(--card);border:1px solid rgba(163,107,255,.2)}
-.plan h3{text-align:center;margin-top:0}
-hr.sep{border:none;border-top:1px solid rgba(163,107,255,.12);margin:24px 0}
-.notice{padding:10px 14px;border-left:3px solid var(--accent);background:rgba(163,107,255,.08);border-radius:10px}
-@media (max-width:900px){
-  .grid{grid-template-columns:1fr 1fr}
-  .split{grid-template-columns:1fr}
-  .pricing{grid-template-columns:1fr}
+.container {
+    max-width: 960px;
+    margin: auto;
+    padding: 20px;
 }
-@media (max-width:640px){
-  h1{font-size:1.6rem}
-  h2{font-size:1.2rem}
-  .gallery{grid-template-columns:1fr 1fr}
+header, footer {
+    text-align: center;
+    padding: 20px 0;
 }
-
-
-/* --- Visual upgrade --- */
-:root{
-  --bg:#07060a;
-  --card:#0e0b12;
-  --ink:#eadbff;
-  --muted:#c9b3ff;
-  --accent:#b07aff;
-  --border: rgba(176,122,255,.35);
-  --border-soft: rgba(176,122,255,.18);
-  --glow: 0 0 .6rem rgba(176,122,255,.5), 0 0 1.6rem rgba(176,122,255,.35), inset 0 0 0.1rem rgba(176,122,255,.35);
+.chat {
+    background-color: #1a1a1a;
+    padding: 20px;
+    border-radius: 8px;
 }
-
-/* Deep background with subtle vignette */
-body{
-  background:
-    radial-gradient(1000px 500px at 50% -10%, rgba(176,122,255,.12), transparent),
-    radial-gradient(700px 400px at 10% 30%, rgba(176,122,255,.06), transparent),
-    radial-gradient(700px 400px at 90% 40%, rgba(176,122,255,.06), transparent),
-    var(--bg);
-  letter-spacing:.01rem;
+.chat-window {
+    height: 200px;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    border: 1px solid #333;
+    padding: 10px;
 }
-
-/* Headings reminiscent of the mockups */
-h1{
-  font-size: clamp(2rem, 6vw, 4rem);
-  letter-spacing:.45rem;
-  text-transform:uppercase;
-  text-shadow: 0 0 .4rem rgba(176,122,255,.5);
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #111;
+    color: #f0f0f0;
+    border: none;
+    border-radius: 4px;
 }
-h2{ letter-spacing:.25rem; text-transform:uppercase }
-
-/* Buttons: outlined glow + ghost/primary variants */
-.btn{
-  position:relative;
-  border:1px solid var(--border);
-  text-transform:uppercase;
-  letter-spacing:.18rem;
-  padding:16px 26px;
-}
-.btn.primary{ background:linear-gradient(180deg, rgba(176,122,255,.12), rgba(176,122,255,.05)); }
-.btn.ghost{ background:transparent; }
-.btn:hover{ box-shadow: var(--glow); border-color: rgba(176,122,255,.55) }
-
-/* Cards & tiles with neon rim */
-.card, .tile{
-  background: linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)) , var(--card);
-  border:1px solid var(--border-soft);
-  border-radius:16px;
-}
-.card:hover, .tile:hover{ box-shadow: var(--glow); border-color: var(--border) }
-
-/* Dashboard tiles */
-.tiles{
-  display:grid;
-  gap:16px;
-  grid-template-columns: repeat(3, 1fr);
-  margin-top: 12px;
-}
-.tile{
-  padding:20px;
-  display:grid;
-  align-content:start;
-  min-height:120px;
-}
-.tile .title{ font-size:1.1rem; margin:8px 0 6px }
-.tile .note{ color:var(--muted); font-size:.9rem }
-
-/* Divider */
-hr.sep{
-  border-top:1px solid var(--border-soft);
-}
-
-/* Section labels resembling captions */
-.badge{
-  font-size:.78rem;
-  color:var(--muted);
-  letter-spacing:.15rem;
-  text-transform:uppercase;
-}
-
-/* Pricing buttons larger */
-.plan .btn{ width:100% }
-
-/* Navbar pills */
-.nav a{ border-color:var(--border-soft) }
-.nav a:hover{ border-color:var(--border) }

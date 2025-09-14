@@ -1,0 +1,2 @@
+Testovací soubor – aby sis ověřil, že funguje ukládání a následné
+nahrání na Google Disk.
