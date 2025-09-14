@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VENISMUS – Dashboard</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
+      color: #fff;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .tile {
+      background-color: #111;
+      border: 1px solid #444;
+      padding: 20px;
+      border-radius: 12px;
+      transition: 0.3s;
+      text-decoration: none;
+      color: #fff;
+    }
+    .tile:hover {
+      background-color: #333;
+    }
+    footer {
+      margin-top: 40px;
+      font-size: 0.8em;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌌 Vítej ve světě VENISMUS</h1>
+  <div class="grid">
+    <a class="tile" href="chat.html">🧠 Auren AI Chat</a>
+    <a class="tile" href="generator.html">🎨 AI Generátor Obrázků</a>
+    <a class="tile" href="knihovna.html">📚 Knihovna & Deník</a>
+    <a class="tile" href="ceny.html">💎 Ceník & Tokeny</a>
+    <a class="tile" href="profil.html">👤 Přihlášení / Účet</a>
+    <a class="tile" href="elaria.html">💋 Přepnout na ELARIA</a>
+  </div>
+  <footer>
+    Powered by Venismus & Auren © 2025
+  </footer>
+</body>
+</html>
