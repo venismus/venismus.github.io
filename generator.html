@@ -1,78 +1,64 @@
-<!doctype html>
+
+<!DOCTYPE html>
 <html lang="cs">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Generátor • VENISMUS</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generátor Elaria</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(150deg, #1a002e, #0a0014);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+    }
+    h1 {
+      color: #ff3f9c;
+      margin-bottom: 30px;
+    }
+    textarea {
+      width: 90%;
+      max-width: 500px;
+      height: 100px;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+    }
+    .btn {
+      margin-top: 20px;
+      background-color: #ff3f9c;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .btn:hover {
+      background-color: #ff1f85;
+    }
+    .output {
+      margin-top: 40px;
+    }
+    .output img {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255, 63, 156, 0.2);
+    }
+  </style>
 </head>
 <body>
-<header class="header">
-  <div class="brand">VENISMUS</div>
-  <nav class="nav">
-    <a href="index.html">Úvod</a>
-    <a href="chat.html">Chat</a>
-    <a href="generator.html">Generátor</a>
-    <a href="knihovna.html">Knihovna</a>
-    <a href="ceny.html">Ceny</a>
-    <a href="profil.html">Můj profil</a>
-  </nav>
-</header>
-<div class="container">
+  <h1>🎨 AI Generátor obrázků</h1>
+  <p>Zadej popis scény nebo dívky, kterou chceš vytvořit:</p>
+  <textarea placeholder="Např. Elegantní blondýna v nočním klubu..."></textarea><br>
+  <button class="btn">Vygenerovat za 50 tokenů</button>
 
-<h1>VENISM Image Creator</h1>
-<div class="card">
-  <p class="badge">Origin Unleashed</p>
-  <label>Popis</label>
-  <textarea id="prompt" class="input" rows="3">Create an image of a mystical sorceress holding a crystal ball</textarea>
-  <div style="display:flex;gap:10px;margin:10px 0">
-    <button class="btn ghost" id="textMode">TEXT</button>
-    <button class="btn ghost" id="voiceMode">VOICE</button>
+  <div class="output">
+    <p><i>Vygenerovaný obrázek se zobrazí zde...</i></p>
+    <!-- <img src="img/generated_sample.jpg" alt="Generated image"> -->
   </div>
-  <button class="btn primary" id="generate">GENERATE</button>
-  <div style="height:12px"></div>
-  <img id="out" style="display:none;border-radius:14px;border:1px solid rgba(163,107,255,.2);width:100%">
-</div>
-<script>
-document.getElementById('generate').onclick = ()=>{
-  const p = document.getElementById('prompt').value;
-  const url = fakeGenerate(p,'temny','silna');
-  const img = document.getElementById('out');
-  img.src=url; img.style.display='block';
-  toast('Hotovo – demo náhled vytvořen.');
-};
-</script>
-
-</div>
-<footer>© 2025 Venismus</footer>
-<script>
-const $ = (sel, root=document)=>root.querySelector(sel);
-const $$ = (sel, root=document)=>[...root.querySelectorAll(sel)];
-
-const auth = {
-  get(){ return JSON.parse(localStorage.getItem('ven_auth')||'null'); },
-  set(user){ localStorage.setItem('ven_auth', JSON.stringify(user)); },
-  signout(){ localStorage.removeItem('ven_auth'); location.href='index.html'; }
-};
-
-function requireAuth(){
-  if(!auth.get()){ location.href='signin.html'; }
-}
-
-function toast(msg){
-  const t = document.createElement('div');
-  t.textContent = msg;
-  Object.assign(t.style,{position:'fixed',bottom:'20px',left:'50%',transform:'translateX(-50%)',padding:'10px 14px',border:'1px solid rgba(163,107,255,.35)',background:'#0e0c12',color:'#e7d7ff',borderRadius:'12px',boxShadow:'0 0 .6rem rgba(163,107,255,.5)'});
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(),2000);
-}
-
-// demo image generator stub
-function fakeGenerate(prompt, style, power){
-  const url = `https://picsum.photos/seed/${encodeURIComponent(prompt+style+power)}/512/512`;
-  return url;
-}
-</script>
-<script></script>
 </body>
 </html>
