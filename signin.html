@@ -1,71 +1,74 @@
-<!doctype html>
-<html lang="cs">
+
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Přihlášení • VENISMUS</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Přihlášení – Elaria</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(160deg, #1c002e, #2c003e);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+    }
+    .container {
+      background-color: rgba(255,255,255,0.05);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(255, 63, 156, 0.3);
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+    }
+    h2 {
+      color: #ff3f9c;
+      margin-bottom: 20px;
+    }
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: none;
+      border-radius: 8px;
+    }
+    .btn {
+      background-color: #ff3f9c;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 20px;
+    }
+    .btn:hover {
+      background-color: #ff1f85;
+    }
+    p {
+      font-size: 0.9em;
+      margin-top: 20px;
+    }
+    a {
+      color: #ccc;
+      text-decoration: none;
+    }
+    a:hover {
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
-<header class="header">
-  <div class="brand">VENISMUS</div>
-  <nav class="nav">
-    <a href="index.html">Úvod</a>
-    <a href="chat.html">Chat</a>
-    <a href="generator.html">Generátor</a>
-    <a href="knihovna.html">Knihovna</a>
-    <a href="ceny.html">Ceny</a>
-    <a href="profil.html">Můj profil</a>
-  </nav>
-</header>
-<div class="container">
-
-<h1>Přihlášení</h1>
-<div class="card">
-  <label>Email</label>
-  <input id="email" class="input" placeholder="ty@domena.cz">
-  <label>Heslo</label>
-  <input id="pass" class="input" type="password" placeholder="••••••••">
-  <div style="height:10px"></div>
-  <button class="btn primary" id="go">Přihlásit</button>
-</div>
-<script>
-document.getElementById('go').onclick = ()=>{
-  auth.set({email:document.getElementById('email').value});
-  location.href='profil.html';
-};
-</script>
-
-</div>
-<footer>© 2025 Venismus</footer>
-<script>
-const $ = (sel, root=document)=>root.querySelector(sel);
-const $$ = (sel, root=document)=>[...root.querySelectorAll(sel)];
-
-const auth = {
-  get(){ return JSON.parse(localStorage.getItem('ven_auth')||'null'); },
-  set(user){ localStorage.setItem('ven_auth', JSON.stringify(user)); },
-  signout(){ localStorage.removeItem('ven_auth'); location.href='index.html'; }
-};
-
-function requireAuth(){
-  if(!auth.get()){ location.href='signin.html'; }
-}
-
-function toast(msg){
-  const t = document.createElement('div');
-  t.textContent = msg;
-  Object.assign(t.style,{position:'fixed',bottom:'20px',left:'50%',transform:'translateX(-50%)',padding:'10px 14px',border:'1px solid rgba(163,107,255,.35)',background:'#0e0c12',color:'#e7d7ff',borderRadius:'12px',boxShadow:'0 0 .6rem rgba(163,107,255,.5)'});
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(),2000);
-}
-
-// demo image generator stub
-function fakeGenerate(prompt, style, power){
-  const url = `https://picsum.photos/seed/${encodeURIComponent(prompt+style+power)}/512/512`;
-  return url;
-}
-</script>
-<script></script>
+  <div class="container">
+    <h2>🔐 Přihlášení do Elaria</h2>
+    <input type="text" placeholder="Uživatelské jméno">
+    <input type="password" placeholder="Heslo">
+    <button class="btn">Přihlásit se</button>
+    <p>Nemáš účet? <a href="#">Zaregistruj se</a></p>
+  </div>
 </body>
 </html>
