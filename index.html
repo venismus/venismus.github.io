@@ -1,38 +1,58 @@
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
-    <meta charset="UTF-8">
-    <title>VENISMUS</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            background-color: #000;
-            color: #fff;
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            margin-top: 20vh;
-        }
-        .button {
-            background-color: #111;
-            border: 1px solid #fff;
-            padding: 12px 24px;
-            margin: 20px;
-            cursor: pointer;
-            color: #fff;
-            font-size: 16px;
-            border-radius: 6px;
-            transition: 0.3s;
-        }
-        .button:hover {
-            background-color: #fff;
-            color: #000;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>Vstup | Venismus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.2em;
+      color: #b663ff;
+      margin-bottom: 10px;
+    }
+    p {
+      color: #ccc;
+      margin-bottom: 30px;
+      max-width: 300px;
+    }
+    button {
+      padding: 12px 28px;
+      font-size: 1.2em;
+      background-color: #b663ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    button:hover {
+      background-color: #8d3ddf;
+    }
+    .footer {
+      position: absolute;
+      bottom: 20px;
+      font-size: 0.8em;
+      color: #777;
+    }
+  </style>
 </head>
 <body>
-    <h1>Welcome to VENISMUS</h1>
-    <p>Select your world:</p>
-    <a href="venismus.html"><button class="button">VENISMUS</button></a>
-    <a href="elaria.html"><button class="button">ELARIA</button></a>
+  <h1>Vítej ve světě Venismus</h1>
+  <p>Tento web obsahuje citlivý a AI-generovaný obsah. Pokračuj pouze pokud je ti více než 18 let.</p>
+  <button onclick="location.href='app.html'">Pokračovat</button>
+  <div class="footer">© 2025 Venismus. Všechna práva vyhrazena.</div>
 </body>
 </html>
