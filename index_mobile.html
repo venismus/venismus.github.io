@@ -1,0 +1,37 @@
+// server.js
+// Jednoduchý OpenAI-kompatibilní proxy. Udrž API klíč na serveru.
+import express from "express";
+import fetch from "node-fetch";
+
+const app = express();
+app.use(express.json());
+
+const PORT = process.env.PORT || 8787;
+const TARGET = process.env.OPENAI_BASE || "https://api.openai.com/v1";
+const API_KEY = process.env.OPENAI_API_KEY || "";
+
+if (!API_KEY) {
+  console.warn("⚠️  OPENAI_API_KEY není nastaven. Nastav ho před spuštěním.");
+}
+
+app.post("/chat", async (req, res) => {
+  try {
+    const r = await fetch(`${TARGET}/chat/completions`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${API_KEY}`
+      },
+      body: JSON.stringify(req.body)
+    });
+    res.status(r.status);
+    res.set("Content-Type", r.headers.get("content-type") || "application/json");
+    res.send(await r.text());
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.listen(PORT, () => {
+  console.log(`✅ Proxy běží na http://localhost:${PORT} → ${TARGET}`);
+});
