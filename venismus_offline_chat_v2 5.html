@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<title>VENISMUS Chat v2</title>
+<style>
+        body {
+            background-color: #0d0d0d;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+        }
+        h1 {
+            color: #b13cff;
+        }
+        .chat-box {
+            width: 90%;
+            max-width: 600px;
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        .message {
+            margin: 10px 0;
+        }
+        .user {
+            color: #64dcdc;
+        }
+        .bot {
+            color: #ffd700;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: #333;
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<h1>Vítej ve VENISMUS: Offline Rozhraní</h1>
+<div class="chat-box" id="chat">
+<div class="message bot">Auri: Vítej. Zeptej se na cokoliv.</div>
+</div>
+<input id="userInput" placeholder="Napiš zprávu a stiskni Enter..." type="text"/>
+<script>
+        const chat = document.getElementById('chat');
+        const input = document.getElementById('userInput');
+
+        input.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                const userText = input.value.trim();
+                if (!userText) return;
+
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message user';
+                userMessage.textContent = 'Ty: ' + userText;
+                chat.appendChild(userMessage);
+
+                const botMessage = document.createElement('div');
+                botMessage.className = 'message bot';
+                botMessage.textContent = 'Auri: ' + getResponse(userText);
+                chat.appendChild(botMessage);
+
+                input.value = '';
+                chat.scrollTop = chat.scrollHeight;
+            }
+        });
+
+        function getResponse(input) {
+            // Basic simulated response
+            return "Tohle je offline verze. Brzy budeš moci používat plnou funkčnost.";
+        }
+    </script>
+</body>
+</html>

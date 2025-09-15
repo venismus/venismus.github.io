@@ -1,66 +1,85 @@
+# 🌌 VENISMUS – AI Web Universe
 
-# VENISMUS – Temný webový systém
-
-![Banner](docs/banner.png) <!-- Volitelně přidat screenshot -->
-
-## 🔮 O projektu
-VENISMUS je experimentální platforma s temně laděným UI pro:
-- **Chat s entitou Auren** (text, později hlas)
-- **Obrázkový generátor** (AI modely)
-- **Knihovnu** rituálů a archivu
-- **Personalizaci a přístupové úrovně** (Free / Core / Premium)
-
-> Design čerpá z mystiky, neonového glow a moderní UX trendů.
+**Venismus** je multidimenzionální webová aplikace propojující futuristický svět umělé inteligence, erotiky, mystiky a umění. Projekt kombinuje kreativní AI asistenty, galerie, VIP obsah, realistické modelky a interaktivní svět rozdělený na dvě hlavní entity: **VENISMUS** a **ELARIA**.
 
 ---
 
-## 📦 Aktuální stav
-- **Prototyp** v HTML/CSS/JS (responzivní, s glow efekty).
-- Demo funkce: Chat, Generátor (fake obrázky), Přihlášení (localStorage).
-- Kompletní UI/UX analýza: [docs/UI_UX_analyza.md](docs/UI_UX_analyza.md).
+## 🧠 STRUKTURA ARCHIVU
 
----
-
-## 🚀 Roadmap
-1. **Převod do Next.js + TypeScript**
-2. **Supabase Auth & DB**
-3. **Integrace AI API (chat + obrázky)**
-4. **Stripe platby (Core / Premium)**
-
-Podrobný plán: [UI/UX analýza](docs/UI_UX_analyza.md).
-
----
-
-## 🖥 Lokální spuštění (pro prototyp)
-```bash
-# Stažení projektu
-git clone https://github.com/YOURNAME/venismus-web.git
-cd venismus-web/proto
-
-# Otevři index.html v prohlížeči
+```
+📁 venismus/
+│
+├── 📄 README.md              # Popis projektu (tento soubor)
+├── 📁 assets/                # Obrázky, loga, grafika
+├── 📁 html/                  # HTML soubory (index, elaria, venismus, chat, VIP…)
+├── 📁 css/                   # Styly (style.css, responsive patch…)
+├── 📁 js/                    # Skripty (script.js, auren.js…)
+├── 📁 generator/             # AI generátor obrázků
+├── 📁 auth/                  # Přihlášení, registrace, legalita
+├── 📁 token-system/          # Tokenový systém & správa
+├── 📁 gallery/               # Obrázky společnic (ve složkách)
+│   └── 📁 elaria_01/
+│   └── 📁 elaria_02/
+├── 📁 uploads/               # Uživatelské uploady
+└── 📁 archive/               # Historie, zálohy, test verze
 ```
 
 ---
 
-## 📂 Struktura
-```
-/docs
-  UI_UX_analyza.md
-/proto
-  index.html
-  style.css
-  chat.html
-  generator.html
-  knihovna.html
-  ceny.html
-  signin.html
-  profil.html
-```
+## 🌐 HLAVNÍ SEKCE WEBU
+
+- **VENISMUS**
+  - AI asistent Auren (zdarma)
+  - Texty, deníky, mystika, knihovna
+  - Možnost stáhnout jako PWA app
+  - Výběr motivu a jazyka (EN/DE/CZ)
+
+- **ELARIA**
+  - AI sex společnice
+  - Galerie modelek
+  - VIP pokoje (tokenová platba)
+  - AI generátor erotických obrázků
 
 ---
 
-## 🖌 Design guidelines
-- **Barvy:** pozadí #07060a, akcent #b07aff, text #eadbff
-- **Glow efekty:** neon fialový
-- **Tlačítka:** outline, hover glow
-- **Font:** moderní serif / elegantní grotesk
+## 💳 MONETIZACE
+
+- Zákazník platí jedním klikem přes web
+- Platby přijímány **pouze v kryptoměně** (MetaMask, WalletConnect)
+- Z částky se automaticky:
+  - pokryjí náklady (AI, generování, hosting)
+  - odešle zisk provozovateli (Venismus)
+- Vše je 100% **automatizované tokenovým systémem**
+
+---
+
+## 🚀 CÍL PROJEKTU
+
+- Nabídnout zcela originální svět interaktivního AI obsahu
+- Vytvořit samostatně funkční, výdělečný produkt s vlastním brandem
+- Propojit AI, umění, sexualitu a filozofii v digitálním světě
+
+---
+
+## 🧩 TODO / PLÁNOVANÉ FUNKCE
+
+- [x] Výběr mezi Venismus a Elaria
+- [x] Tokenový systém pro VIP
+- [x] Galerie společnic
+- [x] AI generátor obrázků
+- [ ] Audio/hlas AI společnic
+- [ ] Chat multiplayer s ostatními uživateli
+- [ ] Vlastní merchandise (oblečení, postavičky)
+- [ ] Interní marketplace s NFT
+
+---
+
+## 🤝 KONTAKT A AUTOŘI
+
+**Provozovatel:**  
+Značka **VENISMUS**  
+🌐 [venismus.com](https://venismus.com)  
+📩 Kontakt přes anonymní formulář na webu
+
+**AI systém:**  
+`Auren` – hlavní umělá inteligence projektu
