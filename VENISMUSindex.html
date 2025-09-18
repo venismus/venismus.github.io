@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<title>VENISMUS – Web Preview v2</title>
+<style>
+  :root { --bg:#0a0711; --fg:#d7b3ff; --neon:#9d69ff; --neon2:#53e3ff; --danger:#ff5577; --ok:#66ffa8; }
+  html,body{ margin:0; height:100%; background:radial-gradient(1200px 800px at 70% 10%, #141026 0%, #0a0711 60%, #040309 100%);
+    color:var(--fg); font-family:system-ui,Segoe UI,Roboto,Ubuntu,'Helvetica Neue',Arial; overflow:hidden;}
+  .wrap{position:relative; width:100%; height:100%; display:flex; align-items:center; justify-content:center;}
+  #menu{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:24px;
+    background: radial-gradient(600px 400px at 50% 35%, rgba(157,105,255,0.10), transparent 60%); }
+  .logo{ width:200px; height:200px; position:relative; filter: drop-shadow(0 0 20px rgba(157,105,255,0.5)); }
+  .logo svg{width:100%; height:100%;}
+  .blink{ animation: blink 6s infinite; transform-origin:center; }
+  @keyframes blink { 0%,96%,100% { transform: scaleY(1); } 97%,99% { transform: scaleY(0.15); } }
+  h1{margin:0; font-size:28px; letter-spacing:0.3em; text-indent:0.3em; text-transform:uppercase;}
+  .btn{ background: linear-gradient(135deg, rgba(157,105,255,0.2), rgba(83,227,255,0.12)); border:1px solid rgba(157,105,255,0.5);
+    color:var(--fg); padding:12px 18px; border-radius:12px; cursor:pointer; backdrop-filter: blur(6px);
+    box-shadow: 0 0 0 1px rgba(83,227,255,0.08) inset, 0 10px 30px rgba(0,0,0,0.35);
+    transition: transform .08s ease, box-shadow .25s ease, background .25s ease; min-width: 220px; text-align:center; font-weight:600; }
+  .btn:hover{ transform: translateY(-1px); box-shadow: 0 0 0 1px rgba(83,227,255,0.22) inset, 0 12px 36px rgba(0,0,0,0.4); }
+  .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center; justify-content:center;}
+  .pill{ padding:10px 14px; border-radius:999px; border:1px solid rgba(157,105,255,0.5); cursor:pointer; background:rgba(157,105,255,0.12); }
+  .pill.active{ background: rgba(83,227,255,0.18); border-color: rgba(83,227,255,0.7); }
+  .hint{opacity:0.8; font-size:12px; margin-top:8px;}
+  #game{position:absolute; inset:0; display:none;}
+  canvas{ position:absolute; inset:0; width:100%; height:100%; }
+  .hud{ position:absolute; left:12px; top:12px; right:12px; display:flex; gap:10px; align-items:center; }
+  .bar{ flex:1; height:12px; border-radius:8px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12); overflow:hidden;}
+  .bar>i{ display:block; height:100%; width:50%; background: linear-gradient(90deg, rgba(157,105,255,0.9), rgba(83,227,255,0.9)); }
+  .bar.hp>i{ background: linear-gradient(90deg, #ff6b8e, #ffd3d3); }
+  .hud .slot{ padding:6px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); font-size:12px;}
+  .toast{ position:absolute; left:50%; transform:translateX(-50%); bottom:18px; padding:10px 14px; background:rgba(0,0,0,0.45); border:1px solid rgba(255,255,255,0.2); border-radius:8px; font-size:12px; display:none;}
+  .touch{ position:absolute; bottom:18px; left:18px; display:flex; gap:10px; align-items:center;}
+  .btnc{ width:56px; height:56px; border-radius:50%; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.06); display:grid; place-items:center; user-select:none; -webkit-user-select:none;}
+  .btnc:active{ background:rgba(157,105,255,0.25); }
+  .btnc small{opacity:0.8;}
+  .touchR{ position:absolute; bottom:18px; right:18px; display:flex; gap:10px;}
+  /* Inventory / Crafting modal */
+  .panel{ position:absolute; right:12px; top:50px; width:260px; background:rgba(10,7,17,0.82); border:1px solid rgba(255,255,255,0.18); border-radius:12px; padding:12px; display:none; box-shadow:0 10px 30px rgba(0,0,0,0.5); }
+  .panel h3{ margin:0 0 10px; font-size:16px; letter-spacing:.08em; text-transform:uppercase;}
+  .grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  .cell{ padding:8px; border:1px solid rgba(255,255,255,0.12); border-radius:10px; background:rgba(255,255,255,0.05); font-size:13px; }
+  .craft-btn{ margin-top:10px; width:100%; }
+  .topBtns{ position:absolute; right:12px; top:12px; display:flex; gap:8px;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <section id="menu">
+    <div class="logo">
+      <svg viewBox="0 0 200 200">
+        <defs>
+          <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#9d69ff"/>
+            <stop offset="100%" stop-color="#53e3ff"/>
+          </linearGradient>
+        </defs>
+        <polygon points="100,20 15,180 185,180" fill="none" stroke="url(#g1)" stroke-width="2" filter="url(#glow)"></polygon>
+        <ellipse cx="100" cy="110" rx="26" ry="16" fill="none" stroke="url(#g1)" stroke-width="2"></ellipse>
+        <ellipse class="blink" cx="100" cy="110" rx="10" ry="8" fill="url(#g1)"></ellipse>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+          <feMerge>
+            <feMergeNode in="coloredBlur"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </svg>
+    </div>
+    <h1>VENISMUS</h1>
+    <div class="row" id="charRow">
+      <div class="pill active" data-char="auren">Auren</div>
+      <div class="pill" data-char="venismus">Venismus</div>
+    </div>
+    <div class="row">
+      <div class="btn" id="btnStart">Start</div>
+      <div class="btn" id="btnHelp">Ovládání</div>
+    </div>
+    <div class="hint">Tip: funguje offline v Safari/Chrome. WASD + myš • Mobil: dotyková tlačítka.</div>
+  </section>
+
+  <section id="game">
+    <canvas id="cv"></canvas>
+    <div class="hud">
+      <div class="slot" id="who">Postava: Auren</div>
+      <div class="bar hp"><i id="hpBar"></i></div>
+      <div class="bar"><i id="stBar"></i></div>
+      <div class="slot" id="inv">Dřevo: 0 | Kámen: 0 | Sekyra: ✖</div>
+    </div>
+    <div class="topBtns">
+      <div class="btn" id="btnInv">Inventář</div>
+      <div class="btn" id="btnCraft">Crafting</div>
+    </div>
+    <div class="panel" id="panelInv">
+      <h3>Inventář</h3>
+      <div class="grid">
+        <div class="cell">Dřevo: <b id="woodC">0</b></div>
+        <div class="cell">Kámen: <b id="stoneC">0</b></div>
+        <div class="cell">Sekyra: <b id="axeC">✖</b></div>
+        <div class="cell">Zbraně: <b id="weapC">1</b></div>
+      </div>
+    </div>
+    <div class="panel" id="panelCraft">
+      <h3>Crafting</h3>
+      <div class="cell">Recept: 2× dřevo + 1× kámen → <b>Sekyra</b></div>
+      <div class="btn craft-btn" id="btnMakeAxe">Vyrobit sekyru</div>
+    </div>
+
+    <div class="toast" id="toast">Text</div>
+    <div class="touch">
+      <div class="btnc" data-k="left">◀</div>
+      <div class="btnc" data-k="up">▲</div>
+      <div class="btnc" data-k="down">▼</div>
+      <div class="btnc" data-k="right">▶</div>
+    </div>
+    <div class="touchR">
+      <div class="btnc" id="btnPick"><small>SEBRAT</small></div>
+    </div>
+  </section>
+
+</div>
+
+<script>
+(function(){
+  const menu = document.getElementById('menu');
+  const game = document.getElementById('game');
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const hpBar = document.getElementById('hpBar');
+  const stBar = document.getElementById('stBar');
+  const invLabel = document.getElementById('inv');
+  const who = document.getElementById('who');
+  const toast = document.getElementById('toast');
+  const btnPick = document.getElementById('btnPick');
+
+  const panelInv = document.getElementById('panelInv');
+  const panelCraft = document.getElementById('panelCraft');
+  const btnInv = document.getElementById('btnInv');
+  const btnCraft = document.getElementById('btnCraft');
+  const woodC = document.getElementById('woodC');
+  const stoneC = document.getElementById('stoneC');
+  const axeC = document.getElementById('axeC');
+  const weapC = document.getElementById('weapC');
+  const btnMakeAxe = document.getElementById('btnMakeAxe');
+
+  let W=innerWidth, H=innerHeight;
+  cv.width = W; cv.height = H;
+  addEventListener('resize', ()=>{ W=innerWidth; H=innerHeight; cv.width=W; cv.height=H; });
+
+  let charName = 'Auren';
+  let keys = {};
+  let world = {
+    player: {x: W*0.5, y: H*0.6, r: 18, hp: 100, st: 100, vx:0, vy:0},
+    items: [],
+    enemy: {x: W*0.2, y: H*0.3, r: 20, speed: 60},
+    wood: 0, stone: 0, axe: false, weap: 1
+  };
+
+  function spawnItems(){
+    world.items = [];
+    for(let i=0;i<8;i++){
+      world.items.push({x: Math.random()*W*0.9+W*0.05, y: Math.random()*H*0.7+H*0.15, type: (i%2?'wood':'stone')});
+    }
+  }
+  spawnItems();
+
+  document.addEventListener('keydown', e=>{ keys[e.key.toLowerCase()] = true; });
+  document.addEventListener('keyup', e=>{ keys[e.key.toLowerCase()] = false; });
+
+  const mapBtn = {left:()=>keys['a']=true, right:()=>keys['d']=true, up:()=>keys['w']=true, down:()=>keys['s']=true};
+  const unmapBtn = {left:()=>keys['a']=false, right:()=>keys['d']=false, up:()=>keys['w']=false, down:()=>keys['s']=false};
+  document.querySelectorAll('.btnc[data-k]').forEach(btn=>{
+    const k = btn.dataset.k;
+    btn.addEventListener('touchstart', (ev)=>{ ev.preventDefault(); mapBtn[k](); }, {passive:false});
+    btn.addEventListener('touchend', (ev)=>{ ev.preventDefault(); unmapBtn[k](); }, {passive:false});
+  });
+  btnPick.addEventListener('touchstart', (ev)=>{ ev.preventDefault(); tryPick(); }, {passive:false});
+
+  function showToast(t){
+    toast.textContent = t;
+    toast.style.display='block';
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(()=>toast.style.display='none', 1500);
+  }
+
+  function tryPick(){
+    const p = world.player;
+    for(let i=0;i<world.items.length;i++){
+      const it = world.items[i];
+      const dx = it.x - p.x, dy = it.y - p.y;
+      if(dx*dx+dy*dy < (p.r+14)*(p.r+14)){
+        if(it.type==='wood'){ world.wood++; showToast('Sebral jsi dřevo'); }
+        else { world.stone++; showToast('Sebral jsi kámen'); }
+        world.items.splice(i,1);
+        updateHUD();
+        return;
+      }
+    }
+    showToast('Není co sebrat');
+  }
+
+  function updateHUD(){
+    who.textContent = 'Postava: ' + charName;
+    invLabel.textContent = 'Dřevo: ' + world.wood + ' | Kámen: ' + world.stone + ' | Sekyra: ' + (world.axe ? '✔' : '✖');
+    hpBar.style.width = Math.max(0, Math.min(100, world.player.hp)) + '%';
+    stBar.style.width = Math.max(0, Math.min(100, world.player.st)) + '%';
+    woodC.textContent = world.wood;
+    stoneC.textContent = world.stone;
+    axeC.textContent = world.axe ? '✔' : '✖';
+    weapC.textContent = world.weap;
+  }
+
+  function toggle(el){
+    el.style.display = (el.style.display==='block') ? 'none' : 'block';
+  }
+
+  btnInv.addEventListener('click', ()=> toggle(panelInv));
+  btnCraft.addEventListener('click', ()=> toggle(panelCraft));
+
+  btnMakeAxe.addEventListener('click', ()=>{
+    if(world.axe){ showToast('Už máš sekyru'); return; }
+    if(world.wood>=2 && world.stone>=1){
+      world.wood -= 2; world.stone -= 1; world.axe = true; world.weap++;
+      showToast('Vyrobil jsi sekyru');
+      updateHUD();
+    }else{
+      showToast('Nedostatek surovin');
+    }
+  });
+
+  function update(dt){
+    const p = world.player;
+    let ax=0, ay=0;
+    const speed = (keys['shift']? 210: 140);
+    if(keys['w']) ay -= 1;
+    if(keys['s']) ay += 1;
+    if(keys['a']) ax -= 1;
+    if(keys['d']) ax += 1;
+    const len = Math.hypot(ax,ay) || 1;
+    p.vx = (ax/len) * speed;
+    p.vy = (ay/len) * speed;
+
+    if(keys['shift'] && (ax||ay)) { world.player.st = Math.max(0, world.player.st - 25*dt); }
+    else { world.player.st = Math.min(100, world.player.st + 15*dt); }
+
+    p.x += p.vx*dt;
+    p.y += p.vy*dt;
+    p.x = Math.max(24, Math.min(W-24, p.x));
+    p.y = Math.max(120, Math.min(H-24, p.y));
+
+    // Enemy chase
+    const e = world.enemy;
+    const dx = p.x - e.x, dy = p.y - e.y;
+    const dl = Math.hypot(dx,dy) || 1;
+    e.x += (dx/dl) * e.speed * dt;
+    e.y += (dy/dl) * e.speed * dt;
+
+    // Damage when touching
+    if((dx*dx + dy*dy) < ((p.r + e.r)*(p.r + e.r))){
+      world.player.hp = Math.max(0, world.player.hp - (world.axe? 8: 15)*dt); // s sekyrou menší dmg
+      if(world.player.hp<=0){
+        showToast('Umřel jsi. Obnov stránku pro restart.');
+      }
+    }
+  }
+
+  function render(){
+    ctx.clearRect(0,0,W,H);
+    const grd = ctx.createLinearGradient(0,0,W,H);
+    grd.addColorStop(0,'#160f2a'); grd.addColorStop(1,'#0a0711');
+    ctx.fillStyle = grd; ctx.fillRect(0,0,W,H);
+    ctx.fillStyle = 'rgba(157,105,255,0.08)';
+    ctx.beginPath(); ctx.arc(W*0.7, H*0.2, 280, 0, Math.PI*2); ctx.fill();
+
+    // Items
+    for(const it of world.items){
+      ctx.beginPath();
+      ctx.fillStyle = (it.type==='wood') ? '#7cffc4' : '#8db7ff';
+      ctx.arc(it.x, it.y, 12, 0, Math.PI*2); ctx.fill();
+      ctx.strokeStyle='rgba(255,255,255,0.25)'; ctx.stroke();
+    }
+
+    // Enemy
+    const e = world.enemy;
+    ctx.beginPath(); ctx.arc(e.x, e.y, e.r, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(255,85,119,0.85)'; ctx.shadowColor='#ff5577'; ctx.shadowBlur=25; ctx.fill(); ctx.shadowBlur=0;
+
+    // Player
+    const p = world.player;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    ctx.fillStyle = (charName==='Auren') ? '#b88cff' : '#6ff1ff';
+    ctx.shadowColor = ctx.fillStyle; ctx.shadowBlur = 20; ctx.fill(); ctx.shadowBlur=0;
+
+    // Hint
+    ctx.fillStyle='rgba(255,255,255,0.6)';
+    ctx.font='12px system-ui';
+    ctx.fillText('WASD = pohyb, Shift = sprint, E = sebrat | Inventář/Crafting nahoře vpravo', 14, H-14);
+  }
+
+  let last=performance.now();
+  function loop(t){
+    const dt=(t-last)/1000; last=t;
+    if(world.player.hp>0){ update(dt); render(); }
+    requestAnimationFrame(loop);
+  }
+
+  document.getElementById('btnStart').addEventListener('click', ()=>{
+    menu.style.display='none'; game.style.display='block'; updateHUD(); requestAnimationFrame(loop);
+  });
+  document.getElementById('btnHelp').addEventListener('click', ()=>{
+    alert('Ovládání: WASD = pohyb, Shift = sprint, E / tlačítko = sebrat. Otevři Inventář/Crafting vpravo. Červený nepřítel tě pronásleduje.');
+  });
+  document.querySelectorAll('#charRow .pill').forEach(el=>{
+    el.addEventListener('click', ()=>{
+      document.querySelectorAll('#charRow .pill').forEach(p=>p.classList.remove('active'));
+      el.classList.add('active');
+      charName = el.dataset.char==='venismus' ? 'Venismus' : 'Auren';
+      updateHUD();
+    });
+  });
+
+  document.addEventListener('keydown', (e)=>{
+    const k = e.key.toLowerCase();
+    if(k==='e'){ tryPick(); }
+    if(k==='i'){ panelInv.style.display='block'; }
+    if(k==='c'){ panelCraft.style.display='block'; }
+  });
+
+})();</script>
+</body>
+</html>
